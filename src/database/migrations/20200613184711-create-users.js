@@ -23,7 +23,7 @@ module.exports = {
       provider: {
         /* O usuario pode ser tanto cliente quanto prestador de serviços, quando ele for o cliente
         o provider será false quando for prestador será true, por padrão todo usuario será um cliente */
-        type: Sequelize.STRING,
+        type: Sequelize.BOOLEAN,
         defaultValue: false,
         allowNull: false,
       },

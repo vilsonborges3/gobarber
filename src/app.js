@@ -1,4 +1,6 @@
 import express from 'express';
+import path from 'path';
+
 import routes from './routes'; // importamos as rotas
 import './database';
 
@@ -15,6 +17,10 @@ class App {
 
   middleeares() {
     this.server.use(express.json()); // aplicação pronta para receber requisições no formato de json
+    this.server.use(
+      '/files',
+      express.static(path.resolve(__dirname, '..', 'tmp', 'uploads'))
+    );
   }
 
   routes() {
