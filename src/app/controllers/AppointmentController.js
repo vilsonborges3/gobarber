@@ -44,6 +44,14 @@ class AppointmentController {
     if (!(await schema.isValid(req.body))) {
       return res.status(400).json({ error: 'Validation fails' });
     }
+    /**
+     * check if provider and id is the same
+     */
+    if (req.userId === provider_id) {
+      return res
+        .status(400)
+        .json({ error: 'User and provider does not be the same' });
+    }
 
     const { provider_id, date } = req.body;
     /*
