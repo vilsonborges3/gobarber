@@ -12,13 +12,14 @@ import Appointment from '../models/Appointment';
 
 class AvailableController {
   async index(req, res) {
+    // catch day when you want to check availability
     const { date } = req.query;
 
     if (!date) {
       return res.status(400).json({ error: 'Invalid date' });
     }
     const searchDate = Number(date);
-
+    // Get all the supplier's appointment passed in the requisition on the day of the date sent
     const appointment = await Appointment.findAll({
       where: {
         provider_id: req.params.providerId,
@@ -30,6 +31,7 @@ class AvailableController {
     });
 
     const schedule = [
+      // hour available to a provider
       '08:00',
       '09:00',
       '10:00',
@@ -46,11 +48,13 @@ class AvailableController {
 
     const available = schedule.map((time) => {
       const [hour, minute] = time.split(':');
-      // converte a hora enviada no query para colocar em horario fixo
+      //
       const value = setSeconds(
         setMinutes(setHours(searchDate, hour), minute),
         0
       );
+
+      console.log(value);
 
       return {
         time,
