@@ -1,5 +1,9 @@
 import express from 'express';
 import path from 'path';
+import * as Sentry from '@sentry/node';
+import sentryConfig from './config/sentry';
+
+import 'express-async-errors';
 
 import routes from './routes'; // importamos as rotas
 import './database';
@@ -11,11 +15,15 @@ class App {
   constructor() {
     // chamado automaticamente quando instaciarmos a class app
     this.server = express();
+
+    Sentry.init(sentryConfig);
+
     this.middleeares();
     this.routes();
   }
 
   middleeares() {
+    this.server.use(Sentry.Handlers.requestHandler());
     this.server.use(express.json()); // aplicação pronta para receber requisições no formato de json
     this.server.use(
       '/files',
@@ -25,6 +33,7 @@ class App {
 
   routes() {
     this.server.use(routes);
+    this.server.use(Sentry.Handlers.errorHandler());
   }
 }
 
